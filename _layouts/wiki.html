@@ -1,0 +1,56 @@
+---
+layout: default
+---
+
+{% assign assets_base_url = site.url %}
+{% if site.cdn.jsdelivr.enabled %}
+{% assign assets_base_url = "https://cdn.jsdelivr.net/gh/" | append: site.repository | append: '@master' %}
+{% endif %}
+<section class="collection-head small" data-pattern-id="{{ page.title | truncate: 15, ''}}">
+<div class="container">
+  <div class="columns">
+    <div class="column three-fourths">
+      <div class="collection-title">
+        <h1 class="collection-header">{{ page.title }}</h1>
+
+        <div class="collection-info">
+          <span class="meta-info">
+            <span class="octicon octicon-keyboard"></span>
+            <a href="{{ site.url }}/edit#path={{ page.path }}&posturl={{ page.url }}" >Edit</a>
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="column one-fourth mobile-hidden">
+      {% include sidebar-qrcode.html %}
+    </div>
+  </div>
+</div>
+</section>
+</div>
+<!-- / .banner -->
+<section class="container content">
+<div class="columns">
+  <div class="column three-fourths" >
+    {% include content-header-ad.html %}
+    <article class="article-content markdown-body">
+    {{ content }}
+    {% if site.copyright.enabled %}
+{% include copyright.html %}
+{% endif %}   
+    </article>
+    <div class="share">
+      {% include sns-share.html %}
+    </div>
+    {% include content-footer-ad.html %}
+    <div class="comment">
+      {% include comments.html %}
+    </div>
+  </div>
+  <div class="column one-fourth">
+    {% include sidebar-search.html %}
+    {% include sidebar-post-nav.html %}
+  </div>
+</div>
+</section>
+<!-- /section.content -->
