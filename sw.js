@@ -7,6 +7,7 @@
  * ========================================================== */
 
 const RUNTIME = 'candy'
+const NetworkFirst = false
 const HOSTNAME_WHITELIST = [
     'fonts.gstatic.com',
     'fonts.googleapis.com',
@@ -61,9 +62,9 @@ self.addEventListener('fetch', event => {
         // Stale-while-revalidate
         // similar to HTTP's stale-while-revalidate: https://www.mnot.net/blog/2007/12/12/stale
         // Upgrade from Jake's to Surma's: https://gist.github.com/surma/eb441223daaedf880801ad80006389f1
-        const cached = caches.match(event.request,{ignoreVary:true})
+        const cached = caches.match(event.request, {ignoreVary: true})
         const fixedUrl = getFixedUrl(event.request)
-        const fetched = fetch(fixedUrl, { cache: 'no-store' })
+        const fetched = fetch(fixedUrl, {cache: 'no-store'})
         const fetchedCopy = fetched.then(resp => resp.clone())
 
         // Call respondWith() with whatever we get first.
@@ -73,36 +74,44 @@ self.addEventListener('fetch', event => {
         event.respondWith(
             Promise.race([fetched.catch(_ => cached), cached])
                 .then(resp => resp || fetched)
-                .catch(_ => { console.error(_)})
+                .catch(_ => {
+                    console.error(_)
+                })
         )
 
         // Update the cache with the version we fetched (only for ok status)
         event.waitUntil(
             Promise.all([fetchedCopy, caches.open(RUNTIME)])
                 .then(([response, cache]) => response.ok && cache.put(event.request, response))
-                .catch(_ => { console.error(_) })
+                .catch(_ => {
+                    console.error(_)
+                })
         )
-    }else if([self.location.hostname].indexOf(new URL(event.request.url).hostname)>-1){
-        const cached = caches.match(event.request,{ignoreVary:true})
+    } else if ([self.location.hostname].indexOf(new URL(event.request.url).hostname) > -1) {
+        const cached = caches.match(event.request, {ignoreVary: true})
         const fixedUrl = getFixedUrl(event.request)
-        const fetched = fetch(fixedUrl, { cache: 'no-store' })
+        const fetched = fetch(fixedUrl, {cache: 'no-store'})
         const fetchedCopy = fetched.then(resp => resp.clone())
 
         // 如果是md文件或者其他内容
-        const contentSuffix=["md","/"]
-        if(contentSuffix.some(suffix=>new URL(event.request.url).pathname.endsWith(suffix))){
+        const contentSuffix = ["md", "/"]
+        if (NetworkFirst&&contentSuffix.some(suffix => new URL(event.request.url).pathname.endsWith(suffix))) {
             event.respondWith(fetched.catch(_ => cached))
 
-        }else {
+        } else {
             event.respondWith(
                 Promise.race([fetched.catch(_ => cached), cached])
                     .then(resp => resp || fetched)
-                    .catch(_ => { console.error(_)})
+                    .catch(_ => {
+                        console.error(_)
+                    })
             )
         }
         event.waitUntil(
             Promise.all([fetchedCopy, caches.open(RUNTIME)])
                 .then(([response, cache]) => response.ok && cache.put(event.request, response))
-                .catch(_ => { console.error(_) }))
+                .catch(_ => {
+                    console.error(_)
+                }))
     }
 })
