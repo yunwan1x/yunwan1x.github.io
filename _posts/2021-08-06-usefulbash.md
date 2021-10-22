@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 有用的命令行
-categories: github
+categories: bash
 ---
 一些比较有用的bash命令。 记录如下，方便查找。
 
@@ -135,3 +135,4 @@ docker save <镜像名> | bzip2 | pv | ssh <用户名>@<主机名> 'cat | docker
 # 参考
 
 1. [有用的命令行](https://einverne.github.io/post/2019/12/terminal-command-history.html)
+2. [有用的命令行](https://mp.weixin.qq.com/s/ZTMwK5r1d2abXcOtnu6nEA)
