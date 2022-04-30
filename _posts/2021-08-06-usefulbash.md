@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 有用的命令行
-categories: github
+categories: bash
 ---
 一些比较有用的bash命令。 记录如下，方便查找。
 
@@ -96,6 +96,8 @@ remotehost的3000端口，-f 后台，-N不需要接命令
 ssh -N -f -L localhost:2000:remote:3000 root@tunnelhost
 ```
 
+* socat网络瑞士军刀。nmap端口扫描。
+
 ## ip路由相关
 
 对于有多个网口或者虚拟网口的机器，ip route会非常有用。
@@ -129,3 +131,8 @@ ip route get $dst
 ```bash
 docker save <镜像名> | bzip2 | pv | ssh <用户名>@<主机名> 'cat | docker load'
 ```
+
+# 参考
+
+1. [有用的命令行](https://einverne.github.io/post/2019/12/terminal-command-history.html)
+2. [有用的命令行](https://mp.weixin.qq.com/s/ZTMwK5r1d2abXcOtnu6nEA)
